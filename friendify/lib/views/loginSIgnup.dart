@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:friendify/main.dart';
+import 'package:friendify/views/globalUsers.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 // Corrected import statement
@@ -355,14 +356,12 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
 
         // After successful registration, navigate to the home page
         // ignore: use_build_context_synchronously
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => MyHomePage(
-        //       title: 'Home',
-        //     ),
-        //   ),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => GlobalUsersPage(),
+          ),
+        );
       },
       child: Container(
         width: MediaQuery.of(context).size.width,
