@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:friendify/controllers/googleAuth.dart';
 import 'package:friendify/main.dart';
 import 'package:friendify/views/globalUsers.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -234,20 +235,30 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   }
 
   Widget _googleButton() {
-    return ElevatedButton(
+  return ElevatedButton(
       onPressed: () {
         signInWithGoogle();
-        const Text('Login with Google');
+        print('Login with Google');
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color.fromARGB(255, 0, 0, 0),
         padding: EdgeInsets.zero,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(8), // Adjust radii as needed
+            bottomLeft: Radius.circular(8),
+            bottomRight:
+                Radius.circular(0), // Set this radius to 0 for a square edge
+            topRight: Radius.circular(8), // Adjust radii as needed
+          ),
+        ),
       ),
       child: Row(
         children: [
           Container(
             decoration: BoxDecoration(
-              border: Border.all(color: const Color.fromARGB(255, 0, 0, 0), width: 2),
+              border: Border.all(
+                  color: const Color.fromARGB(255, 0, 0, 0), width: 2),
             ),
             child: Stack(
               alignment: Alignment.center,
@@ -285,6 +296,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
       ),
     );
   }
+
 
   signInWithGoogle() async {
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -351,11 +363,13 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   Widget _signUpSubmitButton() {
     return GestureDetector(
       onTap: () async {
-        await registerWithEmailAndPassword(
-            _signUpEmailController.text, _signUpPasswordController.text);
+        final AuthService authentication = AuthService();
+        
+        print(_fullnameController.text);
+        print(_signUpEmailController.text);
+        print(_confirmPasswordController.text);
+        await authentication.signUp(fullname: _fullnameController.text, email:_signUpEmailController.text, password: _confirmPasswordController.text, confirmpassword: _confirmPasswordController.text);
 
-        // After successful registration, navigate to the home page
-        // ignore: use_build_context_synchronously
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -482,9 +496,8 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         child: Column(
           children: [
             Container(
-              
               child: TextFormField(
-              controller: _signUpPasswordController,
+              controller: _fullnameController,
               decoration: InputDecoration(
                 hintText: 'Enter Full Name',
                 border: OutlineInputBorder(
