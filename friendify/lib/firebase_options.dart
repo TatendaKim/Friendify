@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCx22wX1r_sraVOvcga_g5-xRpybx_dyzo',
-    appId: '1:487803799008:web:16709c781bf03f8ac4d785',
-    messagingSenderId: '487803799008',
-    projectId: 'friendify-1d24a',
-    authDomain: 'friendify-1d24a.firebaseapp.com',
-    storageBucket: 'friendify-1d24a.appspot.com',
+    apiKey: 'AIzaSyAYiUeUkaO8gATp4XVK2FXh5Yvn_Wxe9lU',
+    appId: '1:266670462206:web:1229d24111c3df9e6a01af',
+    messagingSenderId: '266670462206',
+    projectId: 'friendify-app-1d4e7',
+    authDomain: 'friendify-app-1d4e7.firebaseapp.com',
+    storageBucket: 'friendify-app-1d4e7.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAScFh_aHLiLyRwe98xFpbCYynp_YgAFOg',
-    appId: '1:487803799008:android:dc4c8175556b751bc4d785',
-    messagingSenderId: '487803799008',
-    projectId: 'friendify-1d24a',
-    storageBucket: 'friendify-1d24a.appspot.com',
+    apiKey: 'AIzaSyDKMx0uDbR29UQwbGkmgV4JEiYQeAVKlgg',
+    appId: '1:266670462206:android:c6157cfc5d5c14166a01af',
+    messagingSenderId: '266670462206',
+    projectId: 'friendify-app-1d4e7',
+    storageBucket: 'friendify-app-1d4e7.appspot.com',
   );
 }

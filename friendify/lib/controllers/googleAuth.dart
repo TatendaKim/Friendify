@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:friendify/views/loginSIgnup.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -13,22 +15,67 @@ class AuthService {
   // Get the current user
   User? get currentUser => _auth.currentUser;
 
-  // Register with email and password
-  Future<User?> signUp(
+
+
+// Future<AppResponse> sendEmailLink({
+//     required String email,
+//   }) async {
+//     developer.log('sendEmailLink[$email]');
+//     try {
+//       final actionCodeSettings = firebase_auth.ActionCodeSettings(
+//         url: 'https://flutterpasswordles001.page.link/passwordless-001',
+//         handleCodeInApp: true,
+//         androidPackageName: 'com.nonstopio.flutter_passwordless',
+//         iOSBundleId: 'com.nonstopio.flutter_passwordless',
+//       );
+//       developer.log('actionCodeSettings[${actionCodeSettings.asMap()}]');
+//       await _firebaseAuth.sendSignInLinkToEmail(
+//         email: email,
+//         actionCodeSettings: actionCodeSettings,
+//       );
+//       FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
+//         developer.log('onLink[${dynamicLinkData.link}]');
+//       }).onError((error) {
+//         developer.log('onLink.onError[$error]');
+//       });
+//       SPService.instance.setString('passwordLessEmail', email);
+//       return AppResponse.success(
+//         id: 'sendEmailLink',
+//       );
+//     } catch (e, s) {
+//       return AppResponse.error(
+//         id: 'sendEmailLink',
+//         error: e,
+//         stackTrace: s,
+//       );
+//     }
+//   }
+
+
+
+
+ Future<void> signUp(
       {required String fullname,
       required String email,
       required String password,
       required String confirmpassword,
       }) async {
     try {
-      print("Im inside google sign up");
-      UserCredential userCredential = await _auth
-          .createUserWithEmailAndPassword(email: email, password: password);
+       final acs = ActionCodeSettings(
+        url: 'https://friendifyapp.page.link/friendify',
+        handleCodeInApp: true,
+        androidPackageName: 'com.nonstopio.flutter_passwordless',
+        iOSBundleId: 'com.nonstopio.flutter_passwordless',
+      );
+     
+         var emailAuth = email;
+      FirebaseAuth.instance.sendSignInLinkToEmail(
+        email: emailAuth, actionCodeSettings: acs)
+    .catchError((onError) => print('Error sending email verification $onError'))
+    .then((value) => print('Successfully sent email verification'));
 
-      await userCredential.user?.sendEmailVerification();    
 
-      // Update the user's display name
-      await userCredential.user?.updateDisplayName(fullname);
+     
       // await UserProfileCrud(uid: userCredential.user?.uid).addUserProfile(
       //   fullname,
       //   "",
@@ -37,12 +84,45 @@ class AuthService {
       //   "",
       //   false,
       // );
-      return userCredential.user; // Return the newly registered user
+      return ; // Return the newly registered user
     } on FirebaseAuthException catch (e) {
       print(e);
       return null; // Return null on error
     }
   }
+
+
+  
+  // Register with email and password
+  // Future<User?> signUp(
+  //     {required String fullname,
+  //     required String email,
+  //     required String password,
+  //     required String confirmpassword,
+  //     }) async {
+  //   try {
+  //     print("Im inside google sign up");
+  //     UserCredential userCredential = await _auth
+  //         .createUserWithEmailAndPassword(email: email, password: password);
+
+  //     await userCredential.user?.sendEmailVerification();    
+
+  //     // Update the user's display name
+  //     await userCredential.user?.updateDisplayName(fullname);
+  //     // await UserProfileCrud(uid: userCredential.user?.uid).addUserProfile(
+  //     //   fullname,
+  //     //   "",
+  //     //   "",
+  //     //   "",
+  //     //   "",
+  //     //   false,
+  //     // );
+  //     return userCredential.user; // Return the newly registered user
+  //   } on FirebaseAuthException catch (e) {
+  //     print(e);
+  //     return null; // Return null on error
+  //   }
+  // }
 
 //   // Sign in with email and password
 //   Future<User?> signIn(

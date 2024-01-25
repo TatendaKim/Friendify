@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "487803799008",
-    "project_id": "friendify-1d24a",
-    "storage_bucket": "friendify-1d24a.appspot.com"
+    "project_number": "266670462206",
+    "project_id": "friendify-app-1d4e7",
+    "storage_bucket": "friendify-app-1d4e7.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:487803799008:android:dc4c8175556b751bc4d785",
+        "mobilesdk_app_id": "1:266670462206:android:c6157cfc5d5c14166a01af",
         "android_client_info": {
           "package_name": "com.example.friendify"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAScFh_aHLiLyRwe98xFpbCYynp_YgAFOg"
+          "current_key": "AIzaSyDKMx0uDbR29UQwbGkmgV4JEiYQeAVKlgg"
         }
       ],
       "services": {
