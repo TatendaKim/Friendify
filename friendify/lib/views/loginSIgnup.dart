@@ -138,7 +138,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                           fontFamily: 'Roboto', // Use Roboto instead of RobotoMono
                           fontSize: 70,
                           fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 146, 14, 102),
+                          color: Color.fromARGB(255, 121, 240, 25),
                           fontStyle: FontStyle.italic, // Add this line for italic text
                         ),
                       ),
@@ -237,17 +237,17 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     return ElevatedButton(
       onPressed: () {
         signInWithGoogle();
-        print('Login with Google');
+        const Text('Login with Google');
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.blue,
+        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
         padding: EdgeInsets.zero,
       ),
       child: Row(
         children: [
           Container(
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.blue, width: 2),
+              border: Border.all(color: const Color.fromARGB(255, 0, 0, 0), width: 2),
             ),
             child: Stack(
               alignment: Alignment.center,
@@ -274,7 +274,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                 child: const Text(
                   'Login with Google',
                   style: TextStyle(
-                    color: Color.fromARGB(255, 151, 49, 49),
+                    color: Colors.white,
                     fontSize: 18,
                   ),
                 ),

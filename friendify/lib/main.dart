@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:friendify/views/friendsScreen.dart';
 import 'package:friendify/views/globalUsers.dart';
 import 'package:friendify/views/loginSIgnup.dart';
 import 'package:friendify/views/userProfile.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'Friendily App',
       debugShowCheckedModeBanner: false,
       
-      home:  UserProfileScreen(),
+      home:  LoginSignupScreen(),
     );
   }
 }
