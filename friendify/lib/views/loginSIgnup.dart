@@ -370,12 +370,12 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         print(_confirmPasswordController.text);
         await authentication.signUp(fullname: _fullnameController.text, email:_signUpEmailController.text, password: _confirmPasswordController.text, confirmpassword: _confirmPasswordController.text);
 
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => GlobalUsersPage(),
-          ),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => GlobalUsersPage(),
+        //   ),
+        // );
       },
       child: Container(
         width: MediaQuery.of(context).size.width,

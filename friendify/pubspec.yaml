@@ -40,6 +40,8 @@ dependencies:
   google_sign_in: ^6.2.1
   image_picker: ^1.0.7
   firebase_dynamic_links: ^5.4.8
+  shared_preferences: ^2.2.2
+  provider: ^6.1.1
 
 dev_dependencies:
   flutter_test:
