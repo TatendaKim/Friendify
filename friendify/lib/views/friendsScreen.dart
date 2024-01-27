@@ -1,23 +1,58 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:friendify/controllers/friendsCrud.dart';
+import 'package:friendify/controllers/userProfileCrud.dart';
+import 'package:friendify/models/friendsModel.dart';
+import 'package:friendify/models/userProfile.dart';
+import 'package:friendify/views/navigationBar.dart';
 import 'package:friendify/views/userProfile.dart';
 
-class FriendsScreen extends StatelessWidget {
-  final List<String> friendsList = [
-    'Tatenda Kim',
-    'Lloyd Ndhlovu',
-    'Sean Davis',
-    // Add more friends as needed
-  ];
 
-  final String userProfilePictureUrl = 'assets/user1.jpg';
+class FriendsScreen extends StatefulWidget {
+  @override
+  _FriendsScreenState createState() => _FriendsScreenState();
+}
+
+class _FriendsScreenState extends State<FriendsScreen> {
+  List<Friend> friendsList = [];
+  String userProfilePictureUrl = '';
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch friends data when the screen is initialized
+    fetchFriendsData();
+  }
+
+  Future<void> fetchFriendsData() async {
+    // Use your friend service to get friends data
+    FriendService friendService = FriendService();
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+    String currentUserEmail = currentUser.email!;
+   
+    List<Friend> friends = await friendService.getAllFriends(currentUserEmail);
+     
+      // Get the UserProfile for the current user
+    UserProfile? currentUserProfile = await UserProfileCrud().getUserByEmail(currentUserEmail);
+
+      // Check if the UserProfile is not null and get the profile picture URL
+    userProfilePictureUrl = currentUserProfile?.profilePicture ?? '';
+    setState(() {
+      friendsList = friends;
+     
+    });
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text('Friends', style: TextStyle(color: Colors.black,
-        fontWeight: FontWeight.bold,)),
+        title: const Text('Friends', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
@@ -52,10 +87,13 @@ class FriendsScreen extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
+              
               itemCount: friendsList.length,
               itemBuilder: (context, index) {
+                print("the freeekjekejkejkj");
+                print(friendsList[index].name);
                 return FriendListItem(
-                  friendName: friendsList[index],
+                  friend: friendsList[index],
                   onTap: () {
                     // Handle friend list item tap if needed
                   },
@@ -65,28 +103,30 @@ class FriendsScreen extends StatelessWidget {
           ),
         ],
       ),
+      bottomNavigationBar: CustomBottomNavBar(currentIndex: 1),
     );
   }
 }
 
 class FriendListItem extends StatelessWidget {
-  final String friendName;
+  final Friend friend;
   final VoidCallback onTap;
 
-  FriendListItem({required this.friendName, required this.onTap});
-
+  FriendListItem({required this.friend, required this.onTap});
+  
   @override
   Widget build(BuildContext context) {
+   
     return ListTile(
       leading: CircleAvatar(
-        // Replace with profile photo
+        backgroundImage: NetworkImage(friend.profilePictureUrl),
         backgroundColor: Colors.grey,
-        child: Text(friendName[0], style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black)),
+        radius:25,
       ),
-      title: Text(friendName, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      title: Text(friend.name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
       trailing: ElevatedButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfileScreen()));
+          // Navigator.push(context, MaterialPageRoute(builder: (context) => ));
         },
         style: ElevatedButton.styleFrom(
           primary: Colors.black,

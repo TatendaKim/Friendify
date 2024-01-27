@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:friendify/controllers/userProfileCrud.dart';
+import 'package:friendify/models/userProfile.dart';
 import 'package:friendify/views/loginSIgnup.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -29,7 +34,7 @@ class AuthService {
       {required String fullname,
       required String email,
       required String password,
-      required String confirmpassword,
+      required File imageUrl,
       }) async {
     try {
       print("Im inside google sign up");
@@ -39,23 +44,11 @@ class AuthService {
       await userCredential.user?.sendEmailVerification();    
       
 
-//     final actionCodeSettings = ActionCodeSettings(
-//   url: "http://www.example.com/verify?email=${user?.email}",
-//   iOSBundleId: "com.example.ios",
-//   androidPackageName: "com.example.android",
-// );
-
-// await user?.sendEmailVerification(actionCodeSettings);
-      // Update the user's display name
-      await userCredential.user?.updateDisplayName(fullname);
-      // await UserProfileCrud(uid: userCredential.user?.uid).addUserProfile(
-      //   fullname,
-      //   "",
-      //   "",
-      //   "",
-      //   "",
-      //   false,
-      // );
+      String imageDownloadUrl = await uploadImageToStorage(userCredential.user!.uid, imageUrl);
+     
+      UserProfile userProfile = UserProfile(name: fullname, email: email, profilePicture: imageDownloadUrl);
+      await UserProfileCrud().createUser(userProfile);
+      
       return userCredential.user; // Return the newly registered user
     } on FirebaseAuthException catch (e) {
       print(e);
@@ -63,19 +56,32 @@ class AuthService {
     }
 
        }
+
+          // Sign in with email and password
+  Future<User?> signIn(
+      {required String email, required String password}) async {
+    try {
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      return userCredential.user; // Successful sign-in, return the user
+    } on FirebaseAuthException catch (e) {
+      return null; // Return null on sign-in error
+    }
+  }
   }
 
-//   // Sign in with email and password
-//   Future<User?> signIn(
-//       {required String email, required String password}) async {
-//     try {
-//       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-//           email: email, password: password);
-//       return userCredential.user; // Successful sign-in, return the user
-//     } on FirebaseAuthException catch (e) {
-//       return null; // Return null on sign-in error
-//     }
-//   }
+
+ // Function to upload image to Firebase Storage
+  Future<String> uploadImageToStorage(String userId, File imageFile) async {
+    Reference storageReference =
+        FirebaseStorage.instance.ref().child('user_profile_images/$userId/${DateTime.now().millisecondsSinceEpoch}');
+    UploadTask uploadTask = storageReference.putFile(imageFile);
+    TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
+    String downloadURL = await taskSnapshot.ref.getDownloadURL();
+    return downloadURL;
+  }
+
+
 
 //   // Sign out
 //   // Future<void> signOut() async {

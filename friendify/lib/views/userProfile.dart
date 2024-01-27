@@ -1,14 +1,55 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:ui';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:friendify/controllers/friendRequestCrud.dart';
+import 'package:friendify/controllers/userProfileCrud.dart';
+import 'package:friendify/models/userProfile.dart';
 
 class UserProfileScreen extends StatefulWidget {
+
+final UserProfile userProfile;
+UserProfileScreen({required this.userProfile});
+
   @override
   State<UserProfileScreen> createState() => _UserProfileScreenState();
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
+
+    Future<void> createFriendRequest() async {
+    try {
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        String currentUserEmail = currentUser.email!;
+        FriendRequestCrud friendRequestCrud = FriendRequestCrud();
+        UserProfileCrud userProfileCrud = UserProfileCrud();
+        UserProfile? CurrentUserProfile = await userProfileCrud.getUserByEmail(currentUserEmail);
+        print(currentUserEmail);
+        print(widget.userProfile.email);
+        print(widget.userProfile.name);
+        print(widget.userProfile.profilePicture);
+        
+        await friendRequestCrud.createRequest(
+          senderEmail: currentUserEmail,
+          recipientEmail: widget.userProfile.email,
+          status: 'pending',
+          senderName: CurrentUserProfile?.name ?? "", 
+          senderProfilePic: CurrentUserProfile?.profilePicture ?? "",
+        );
+        // Handle success, e.g., show a success message
+        print('Friend request sent successfully!');
+      } else {
+        // Handle the case where the current user is null (not signed in)
+        print('Error: Current user is null.');
+      }
+    } catch (e) {
+      // Handle error, e.g., show an error message
+      print('Error sending friend request: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,9 +57,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         children: [
           Container(
             height: MediaQuery.of(context).size.height * 0.9,
-            decoration: const BoxDecoration(
+            decoration:  BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/user2.jpeg'),
+                image:NetworkImage(widget.userProfile.profilePicture),
                 fit: BoxFit.fitHeight,
               ),
             ),
@@ -56,8 +97,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    'Sean Davis',
+                   Text(
+                    widget.userProfile.name,
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -70,6 +111,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         // Handle follow button press
+                        createFriendRequest();
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.black,

@@ -23,11 +23,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-  final TextEditingController _signUpPasswordController =
-      TextEditingController();
-  final TextEditingController _signUpNameController = TextEditingController();
-  final TextEditingController _signUpEmailController = TextEditingController();
-
+  
   late GlobalKey<FormState> loginFormKey;
   late GlobalKey<FormState> signupFormKey;
 
@@ -73,29 +69,29 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   }
 
   // Function to signup a user
-  Future<void> loginWithEmailAndPassword(
-      String emailAddress, String password) async {
-    try {
-      final credential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: emailAddress, password: password);
+  // Future<void> loginWithEmailAndPassword(
+  //     String emailAddress, String password) async {
+  //   try {
+  //     final credential = await FirebaseAuth.instance
+  //         .signInWithEmailAndPassword(email: emailAddress, password: password);
 
-      // ignore: use_build_context_synchronously
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => MyHomePage(
-      //       title: 'Home',
-      //     ),
-      //   ),
-      // );
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
-      }
-    }
-  }
+  //     // ignore: use_build_context_synchronously
+  //     // Navigator.push(
+  //     //   context,
+  //     //   MaterialPageRoute(
+  //     //     builder: (context) => MyHomePage(
+  //     //       title: 'Home',
+  //     //     ),
+  //     //   ),
+  //     // );
+  //   } on FirebaseAuthException catch (e) {
+  //     if (e.code == 'user-not-found') {
+  //       print('No user found for that email.');
+  //     } else if (e.code == 'wrong-password') {
+  //       print('Wrong password provided for that user.');
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -326,8 +322,14 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   Widget _submitButton() {
     return GestureDetector(
       onTap: () async {
-        loginWithEmailAndPassword(
-            _emailController.text, _passwordController.text);
+       AuthService auth =AuthService();
+        auth.signIn(email:_emailController.text,password: _passwordController.text);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => GlobalUsersPage(),
+        ),
+      );
       },
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -364,18 +366,29 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     return GestureDetector(
       onTap: () async {
         final AuthService authentication = AuthService();
-        
-        print(_fullnameController.text);
-        print(_signUpEmailController.text);
-        print(_confirmPasswordController.text);
-        await authentication.signUp(fullname: _fullnameController.text, email:_signUpEmailController.text, password: _confirmPasswordController.text, confirmpassword: _confirmPasswordController.text);
 
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => GlobalUsersPage(),
-        //   ),
-        // );
+        await authentication
+            .signUp(
+          fullname: _fullnameController.text,
+          email: _emailController.text,
+          password: _passwordController.text,
+          imageUrl: _profileImage!,
+        ).then((success) {
+          if (success != null) {
+            print(success);
+            // Navigate to GlobalUsersPage if sign up was successful
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => GlobalUsersPage(),
+              ),
+            );
+          } else {
+            // Handle sign-up failure, e.g., display an error message
+            // You might want to add an error message to your UI
+            // or show a dialog to inform the user about the failure.
+          }
+        });
       },
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -518,7 +531,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               
               
               TextFormField(
-                controller: _signUpEmailController,
+                controller: _emailController,
                 decoration: InputDecoration(
                   hintText: 'Enter email',
                   border: OutlineInputBorder(
@@ -542,7 +555,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             
             const SizedBox(height: 16),
             TextFormField(
-              controller: _signUpPasswordController,
+              controller: _passwordController,
               decoration: InputDecoration(
                 hintText: 'Enter Password',
                 border: OutlineInputBorder(
