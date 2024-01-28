@@ -15,27 +15,29 @@ class CustomBottomNavBar extends StatelessWidget {
     return BottomNavigationBar(
       currentIndex: currentIndex,
       onTap: (index) => handleNavigation(context, index),
-      selectedItemColor: Colors.green, // Set your desired color for selected item
-      unselectedItemColor: Colors.grey, // Set your desired color for unselected items
-      items: [
+      selectedItemColor: Colors.green, 
+      unselectedItemColor: Colors.grey, 
+      items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'Home',
   ),
-          
-       
+            
         BottomNavigationBarItem(
           icon: Icon(Icons.people),
           label: 'Friends',
         ),
+
         BottomNavigationBarItem(
           icon: Icon(Icons.notifications),
           label: 'Notifications',
         ),
+
         BottomNavigationBarItem(
           icon: Icon(Icons.exit_to_app),
           label: 'Logout',
         ),
+
       ],
     );
   }
@@ -43,19 +45,19 @@ class CustomBottomNavBar extends StatelessWidget {
   void handleNavigation(BuildContext context, int index) {
     switch (index) {
       case 0:
-        // Navigate to Home Screen
+        // Home Screen
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GlobalUsersPage()));
         break;
       case 1:
-        // Navigate to Friends Screen
+        // Friends Screen
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FriendsScreen()));
         break;
       case 2:
-        // Navigate to Notifications Screen
+        // Notifications Screen
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FriendRequestsPage()));
         break;
       case 3:
-        // Logout (Implement your logout logic here)
+        // Logout
         FirebaseAuth.instance.signOut();
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginSignupScreen()));
 

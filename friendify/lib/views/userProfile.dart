@@ -17,7 +17,8 @@ UserProfileScreen({required this.userProfile});
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-
+     bool isFriendRequestSent = false;
+     
     Future<void> createFriendRequest() async {
     try {
       User? currentUser = FirebaseAuth.instance.currentUser;
@@ -26,10 +27,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         FriendRequestCrud friendRequestCrud = FriendRequestCrud();
         UserProfileCrud userProfileCrud = UserProfileCrud();
         UserProfile? CurrentUserProfile = await userProfileCrud.getUserByEmail(currentUserEmail);
-        print(currentUserEmail);
-        print(widget.userProfile.email);
-        print(widget.userProfile.name);
-        print(widget.userProfile.profilePicture);
+        
         
         await friendRequestCrud.createRequest(
           senderEmail: currentUserEmail,
@@ -38,14 +36,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           senderName: CurrentUserProfile?.name ?? "", 
           senderProfilePic: CurrentUserProfile?.profilePicture ?? "",
         );
-        // Handle success, e.g., show a success message
+
+        setState(() {
+        isFriendRequestSent = true;
+      });
         print('Friend request sent successfully!');
       } else {
-        // Handle the case where the current user is null (not signed in)
         print('Error: Current user is null.');
       }
     } catch (e) {
-      // Handle error, e.g., show an error message
       print('Error sending friend request: $e');
     }
   }
@@ -99,25 +98,29 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 children: [
                    Text(
                     widget.userProfile.name,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 8),
                   // ignore: sized_box_for_whitespace
-                  Container(
+                 Container(
                     width: 130,
                     child: ElevatedButton(
                       onPressed: () {
                         // Handle follow button press
-                        createFriendRequest();
+                        if (!isFriendRequestSent) {
+                          createFriendRequest();
+                        }
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.black,
+                        primary:
+                            isFriendRequestSent ? Colors.grey : Colors.black,
                         onPrimary: Colors.white,
                       ),
-                      child: const Text('Request'),
+                      child:
+                          Text(isFriendRequestSent ? 'Requested' : 'Request'),
                     ),
                   ),
                   const SizedBox(height: 16),

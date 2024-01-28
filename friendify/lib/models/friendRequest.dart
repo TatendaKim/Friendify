@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FriendRequest {
   final String senderProfilePic; // Unique ID for the friend request, marked as nullable for Firestore-generated ID
-  final String senderEmail; // Email of the user sending the request
+  final String senderEmail;
   final String senderName;
-  final String recipientEmail; // Email of the user receiving the request
-  final String status; // Status of the friend request
+  final String recipientEmail; 
+  final String status;
 
 
   FriendRequest({
@@ -17,7 +17,7 @@ class FriendRequest {
   });
 
 
-  // Create a FriendRequest object from Firestore data
+  // Here I am creating a FriendRequest object from Firestore data
   factory FriendRequest.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc) {
     Map<String, dynamic> data = doc.data()!;
     return FriendRequest(
@@ -30,7 +30,7 @@ class FriendRequest {
     );
   }
 
-  // Convert the FriendRequest object to a Map for Firestore
+  // I then convert the FriendRequest object to a Map for Firestore
   Map<String, dynamic> toMap() {
     return {
       'senderProfilePic':senderProfilePic,

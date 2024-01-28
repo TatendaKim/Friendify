@@ -1,12 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:friendify/views/friendsScreen.dart';
-import 'package:friendify/views/globalUsers.dart';
-import 'package:friendify/views/loginSIgnup.dart';
-import 'package:friendify/views/userProfile.dart';
-import 'package:provider/provider.dart';
+import 'package:friendify/views/onboarding.dart';
 
 import 'firebase_options.dart';
 Future<void> main() async{
@@ -26,13 +20,10 @@ class MyApp extends StatelessWidget {
  
   @override
   Widget build(BuildContext context) {
-    // AuthProvider authProvider = Provider.of<AuthProvider>(context);
     return MaterialApp(
       title: 'Friendily App',
       debugShowCheckedModeBanner: false,
-      
-      // home: authProvider.isAuthenticated ? GlobalUsersPage() : LoginSignupScreen(),
-      home: GlobalUsersPage()
+      home: OnboardingScreen()
 
     );
   }

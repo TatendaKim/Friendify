@@ -20,12 +20,12 @@ class _FriendsScreenState extends State<FriendsScreen> {
   @override
   void initState() {
     super.initState();
-    // Fetch friends data when the screen is initialized
+    // Fetching friends data when the screen is initialized
     fetchFriendsData();
   }
 
   Future<void> fetchFriendsData() async {
-    // Use your friend service to get friends data
+    // Using friend service to get friends data
     FriendService friendService = FriendService();
     User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
@@ -33,18 +33,18 @@ class _FriendsScreenState extends State<FriendsScreen> {
    
     List<Friend> friends = await friendService.getAllFriends(currentUserEmail);
      
-      // Get the UserProfile for the current user
+      //UserProfile for the current user
     UserProfile? currentUserProfile = await UserProfileCrud().getUserByEmail(currentUserEmail);
 
-      // Check if the UserProfile is not null and get the profile picture URL
-    userProfilePictureUrl = currentUserProfile?.profilePicture ?? '';
+      // This will Check if the UserProfile is not null and get the profile picture URL
+    String profilePictureUrl = currentUserProfile?.profilePicture ?? '';
     setState(() {
       friendsList = friends;
+      userProfilePictureUrl=profilePictureUrl;
      
     });
     }
   }
-
 
 
   @override
@@ -57,15 +57,15 @@ class _FriendsScreenState extends State<FriendsScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context); // Navigate back to the previous screen
+            Navigator.pop(context); // How to navigate back to the previous screen
           },
         ),
         actions: [
           CircleAvatar(
-            backgroundImage: AssetImage(userProfilePictureUrl),
-            radius: 20, // Adjust radius as needed
+            backgroundImage:NetworkImage(userProfilePictureUrl),
+            radius: 20, 
           ),
-          const SizedBox(width: 20), // Add spacing between avatar and other actions
+          const SizedBox(width: 20),
         ],
       ),
       body: Column(
@@ -90,12 +90,21 @@ class _FriendsScreenState extends State<FriendsScreen> {
               
               itemCount: friendsList.length,
               itemBuilder: (context, index) {
-                print("the freeekjekejkejkj");
                 print(friendsList[index].name);
                 return FriendListItem(
                   friend: friendsList[index],
-                  onTap: () {
-                    // Handle friend list item tap if needed
+                  onTap: () async{
+
+                    UserProfile? currentUserProfile = await UserProfileCrud().getUserByEmail(friendsList[index].email);
+                    
+                      // ignore: use_build_context_synchronously
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            UserProfileScreen(userProfile: currentUserProfile!),
+                      ),
+                    );
                   },
                 );
               },
@@ -126,11 +135,11 @@ class FriendListItem extends StatelessWidget {
       title: Text(friend.name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
       trailing: ElevatedButton(
         onPressed: () {
-          // Navigator.push(context, MaterialPageRoute(builder: (context) => ));
         },
         style: ElevatedButton.styleFrom(
+          // ignore: deprecated_member_use
           primary: Colors.black,
-          minimumSize: const Size(100, 40), // Adjust width as needed
+          minimumSize: const Size(100, 40),
         ),
         child: const Text('Friend', style: TextStyle(fontSize: 16, color: Colors.white)),
       ),

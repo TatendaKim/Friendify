@@ -14,7 +14,7 @@ class FriendRequestCrud {
   }) async {
 
     try {
-      // Create a FriendRequest object
+      // FriendRequest object
       FriendRequest friendRequest = FriendRequest(
         senderEmail: senderEmail,
         recipientEmail: recipientEmail,
@@ -24,10 +24,8 @@ class FriendRequestCrud {
       );
       print(senderProfilePic);
 
-      // Convert the FriendRequest object to a Map
       Map<String, dynamic> requestData = friendRequest.toMap();
 
-      // Add the friend request data to Firestore and let Firebase generate the ID
       await friendRequestsCollection.add(requestData);
     } catch (e) {
       print('Error creating friend request: $e');

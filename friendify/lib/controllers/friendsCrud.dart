@@ -8,7 +8,7 @@ class FriendService {
   Future<List<Friend>> getAllFriends(String userEmail) async {
     QuerySnapshot<Map<String, dynamic>> friendsSnapshot =
         await friendsCollection.where('friendOf', isEqualTo: userEmail).get()
-            as QuerySnapshot<Map<String, dynamic>>; // Explicit type cast
+            as QuerySnapshot<Map<String, dynamic>>;
 
     return friendsSnapshot.docs
         .map((DocumentSnapshot<Map<String, dynamic>> doc) {

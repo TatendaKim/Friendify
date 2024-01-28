@@ -12,8 +12,6 @@ class UserProfileCrud {
       print('Error creating user: $e');
     }
   }
-
-
   
   Future<UserProfile?> getUserByEmail(String email) async {
     try {
@@ -21,10 +19,8 @@ class UserProfileCrud {
           await usersCollection.doc(email).get();
 
       if (userDoc.exists) {
-        // If the user with the specified email exists, use the fromFirestore factory method
         return UserProfile.fromFirestore(userDoc);
       } else {
-        // If no user with the specified email is found, return null
         return null;
       }
     } catch (e) {

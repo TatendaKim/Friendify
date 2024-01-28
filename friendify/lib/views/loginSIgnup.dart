@@ -1,14 +1,12 @@
 import 'dart:io';
 import 'dart:ui';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:friendify/controllers/googleAuth.dart';
-import 'package:friendify/main.dart';
 import 'package:friendify/views/globalUsers.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
-// Corrected import statement
+
 
 
 class LoginSignupScreen extends StatefulWidget {
@@ -34,7 +32,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     signupFormKey = GlobalKey<FormState>();
   }
 
-  // Function to register a user
+  // Register a user
   Future<void> registerWithEmailAndPassword(
       String emailAddress, String password) async {
     try {
@@ -43,17 +41,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         email: emailAddress,
         password: password,
       );
-      // ignore: use_build_context_synchronously
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => MyHomePage(
-      //       title: 'Home',
-      //     ),
-      //   ),
-      // );
 
-      // You can handle success here if needed
       print('User registered successfully: ${credential.user?.uid}');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -68,30 +56,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     }
   }
 
-  // Function to signup a user
-  // Future<void> loginWithEmailAndPassword(
-  //     String emailAddress, String password) async {
-  //   try {
-  //     final credential = await FirebaseAuth.instance
-  //         .signInWithEmailAndPassword(email: emailAddress, password: password);
-
-  //     // ignore: use_build_context_synchronously
-  //     // Navigator.push(
-  //     //   context,
-  //     //   MaterialPageRoute(
-  //     //     builder: (context) => MyHomePage(
-  //     //       title: 'Home',
-  //     //     ),
-  //     //   ),
-  //     // );
-  //   } on FirebaseAuthException catch (e) {
-  //     if (e.code == 'user-not-found') {
-  //       print('No user found for that email.');
-  //     } else if (e.code == 'wrong-password') {
-  //       print('Wrong password provided for that user.');
-  //     }
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -132,11 +96,11 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       child: Text(
                         'friendify',
                         style: TextStyle(
-                          fontFamily: 'Roboto', // Use Roboto instead of RobotoMono
+                          fontFamily: 'Roboto', 
                           fontSize: 70,
                           fontWeight: FontWeight.bold,
                           color: Color.fromARGB(255, 121, 240, 25),
-                          fontStyle: FontStyle.italic, // Add this line for italic text
+                          fontStyle: FontStyle.italic, 
                         ),
                       ),
                     ),
@@ -241,11 +205,11 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         padding: EdgeInsets.zero,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(8), // Adjust radii as needed
+            topLeft: Radius.circular(8), 
             bottomLeft: Radius.circular(8),
             bottomRight:
-                Radius.circular(0), // Set this radius to 0 for a square edge
-            topRight: Radius.circular(8), // Adjust radii as needed
+                Radius.circular(0), 
+            topRight: Radius.circular(8), 
           ),
         ),
       ),
@@ -306,16 +270,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     UserCredential userCredential =
         await FirebaseAuth.instance.signInWithCredential(credential);
 
-    // ignore: use_build_context_synchronously
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => MyHomePage(
-    //       title: 'Home',
-    //     ),
-    //   ),
-    // );
-
     print(userCredential.user?.displayName);
   }
 
@@ -363,63 +317,54 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   }
 
   Widget _signUpSubmitButton() {
-    return GestureDetector(
-      onTap: () async {
-        final AuthService authentication = AuthService();
+  return GestureDetector(
+    onTap: () async {
+      final AuthService authentication = AuthService();
 
-        await authentication
-            .signUp(
-          fullname: _fullnameController.text,
-          email: _emailController.text,
-          password: _passwordController.text,
-          imageUrl: _profileImage!,
-        ).then((success) {
-          if (success != null) {
-            print(success);
-            // Navigate to GlobalUsersPage if sign up was successful
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => GlobalUsersPage(),
-              ),
-            );
-          } else {
-            // Handle sign-up failure, e.g., display an error message
-            // You might want to add an error message to your UI
-            // or show a dialog to inform the user about the failure.
-          }
-        });
-      },
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.symmetric(vertical: 15),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(5)),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: Colors.grey.shade200,
-              offset: const Offset(2, 4),
-              blurRadius: 5,
-              spreadRadius: 2,
-            ),
-          ],
-          gradient: const LinearGradient(
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-            colors: [
-              Color.fromARGB(255, 0, 0, 0),
-              Color.fromARGB(255, 0, 0, 0),
-            ],
+      await authentication.signUp(
+        fullname: _fullnameController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
+        imageUrl: _profileImage!,
+      ).then((success) {
+        if (success != null) {
+          _showVerificationDialog();
+        } else {
+        }
+      });
+    },
+
+    child: Container(
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.symmetric(vertical: 15),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.grey.shade200,
+            offset: const Offset(2, 4),
+            blurRadius: 5,
+            spreadRadius: 2,
           ),
-        ),
-        child: const Text(
-          'Sign Up',
-          style: TextStyle(fontSize: 20, color: Colors.white),
+        ],
+        gradient: const LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: [
+            Color.fromARGB(255, 0, 0, 0),
+            Color.fromARGB(255, 0, 0, 0),
+          ],
         ),
       ),
-    );
-  }
+      child: const Text(
+        'Sign Up',
+        style: TextStyle(fontSize: 20, color: Colors.white),
+      ),
+    ),
+  );
+}
+
 
   Widget LoginForm() {
     return SingleChildScrollView(
@@ -472,24 +417,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               },
             ),
             const SizedBox(height: 16),
-            // GestureDetector(
-            //   onTap: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(builder: (context) => ForgotPasswordView()),
-            //     );
-                
-            //     print(
-            //         'Forgot Password?'); 
-            //   },
-            //   child: const Text(
-            //     'Forgot Password?',
-            //     style: TextStyle(
-            //       color: Colors.blue,
-            //       decoration: TextDecoration.underline,
-            //     ),
-            //   ),
-            // ),
             const SizedBox(height: 16),
             _googleButton(),
             const SizedBox(height: 20),
@@ -613,6 +540,26 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     }
 }
 
+
+void _showVerificationDialog() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Verification Link Sent'),
+        content: const Text('A verification link has been sent to your email.'),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop(); 
+            },
+            child: const Text('Okay'),
+          ),
+        ],
+      );
+    },
+  );
+}
 void main() {
   runApp(MaterialApp(
     home: LoginSignupScreen(),

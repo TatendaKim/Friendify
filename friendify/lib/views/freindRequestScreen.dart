@@ -7,8 +7,7 @@ import 'package:friendify/models/friendRequest.dart';
 import 'package:friendify/models/friendsModel.dart';
 import 'package:friendify/models/userProfile.dart';
 import 'package:friendify/views/navigationBar.dart';
-// import 'package:friendify/models/friend_request.dart';
-// import 'package:friendify/firebase/friend_request_crud.dart'; // Import your FriendRequestCrud class
+
 
 class FriendRequestsPage extends StatefulWidget {
   @override
@@ -17,34 +16,32 @@ class FriendRequestsPage extends StatefulWidget {
 
 class _FriendRequestsPageState extends State<FriendRequestsPage> {
   FriendRequestCrud friendRequestCrud = FriendRequestCrud();
-  List<FriendRequest> friendRequests = []; // Declare the list to hold friend requests
+  List<FriendRequest> friendRequests = [];
 
   @override
   void initState() {
     super.initState();
-    // Fetch friend requests when the widget is initialized
+    // Fetching friend requests when the widget is initialized
     getFriendRequests();
   }
  User? currentUser = FirebaseAuth.instance.currentUser;
       
         
   Future<void> getFriendRequests() async {
-    // Replace 'current_user_email' with the actual email of the current user
     User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
     String currentUserEmail = currentUser.email!;
    
     friendRequests = await friendRequestCrud.getFriendRequestsForUser(currentUserEmail);
  }
-    // Refresh the UI after obtaining the friend requests
+    // Refreshing the UI after obtaining the friend requests
     setState(() {});
   }
 
 
 Future<void> acceptFriendRequest(FriendRequest friendRequest) async {
-  String currentUserEmail = currentUser?.email ?? ''; // Replace '' with the default value
+  String currentUserEmail = currentUser?.email ?? ''; 
 
-  // Assuming getUserByEmail returns Future<UserProfile?>
   UserProfile? currentUsersProfile = await UserProfileCrud().getUserByEmail(currentUserEmail);
 
   if (currentUsersProfile != null) {
@@ -66,8 +63,6 @@ Future<void> acceptFriendRequest(FriendRequest friendRequest) async {
     await friendsCrud.addFriend(currentUserEmail, friend);
     await friendsCrud.addFriend(friendRequest.senderEmail, friend2);
 
-    // After accepting, you can update the UI or remove the friend request
-    // For example, you can remove it from the list and call setState to rebuild the UI
     setState(() {
       friendRequests.remove(friendRequest);
     });
@@ -80,7 +75,7 @@ Future<void> acceptFriendRequest(FriendRequest friendRequest) async {
       appBar: AppBar(
         backgroundColor: Colors.white,
 
-        title: Text('Friend Requests'),
+        title: const Text('Friend Requests'),
       ),
       body: ListView.builder(
         itemCount: friendRequests.length,
@@ -95,8 +90,8 @@ Future<void> acceptFriendRequest(FriendRequest friendRequest) async {
 
  Widget buildFriendRequestCard(FriendRequest friendRequest) {
   return Container(
-    margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-    padding: EdgeInsets.all(8),
+    margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+    padding: const EdgeInsets.all(8),
     decoration: BoxDecoration(
       border: Border.all(color: Colors.grey),
       borderRadius: BorderRadius.circular(8),
@@ -110,16 +105,16 @@ Future<void> acceptFriendRequest(FriendRequest friendRequest) async {
               radius: 25,
               backgroundImage: NetworkImage(friendRequest.senderProfilePic),
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   friendRequest.senderName,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 4),
-                Text(
+                const SizedBox(height: 4),
+                const Text(
                   'Sent you a request',
                   style: TextStyle(fontSize: 12, color: Colors.grey),
                 ),
@@ -133,29 +128,27 @@ Future<void> acceptFriendRequest(FriendRequest friendRequest) async {
             ElevatedButton(
               onPressed: () {
                 acceptFriendRequest(friendRequest);
-                // Handle accept button press
-                // You can call a function to accept the friend request
               },
               style: ElevatedButton.styleFrom(
+                // ignore: deprecated_member_use
                 primary: Colors.black,
-                padding: EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
               ),
-              child: Text(
+              child: const Text(
                 'Accept',
                 style: TextStyle(fontSize: 12, color: Colors.white),
               ),
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             ElevatedButton(
               onPressed: () {
-                // Handle deny button press
-                // You can call a function to deny the friend request
               },
               style: ElevatedButton.styleFrom(
+                // ignore: deprecated_member_use
                 primary: Colors.black,
-                padding: EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
               ),
-              child: Text(
+              child: const Text(
                 'Deny',
                 style: TextStyle(fontSize: 12,color: Colors.white),
               ),

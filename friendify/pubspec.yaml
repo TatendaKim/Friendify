@@ -74,6 +74,9 @@ flutter:
     - assets/user1.jpg
     - assets/user2.jpeg
     - assets/user3.webp
+    - assets/connect_with_friends.png
+    - assets/discover_global_users.png
+    - assets/build_friendships.png
   
 
   # An image asset can refer to one or more resolution-specific "variants", see

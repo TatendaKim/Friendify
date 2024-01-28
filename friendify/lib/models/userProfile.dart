@@ -11,7 +11,7 @@ class UserProfile {
     required this.profilePicture,
   });
 
-  // Convert GlobalUser to Map
+  // Converting GlobalUser to Map
   Map<String, dynamic> toMap() {
     return {
       'name': name,
@@ -20,7 +20,7 @@ class UserProfile {
     };
   }
 
-  // Create GlobalUser from Firebase data
+  // I am creating a GlobalUser from Firebase data
   factory UserProfile.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
